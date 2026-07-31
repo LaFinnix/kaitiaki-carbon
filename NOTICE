@@ -1,0 +1,83 @@
+kaitiaki-carbon
+Copyright 2026 Anamata Kāhui Limited
+
+This product includes software developed by third parties:
+
+---
+
+## pyfia
+
+This product includes software derived from **pyfia** by Mihiar & Mohler,
+originally licensed under the MIT License ("MIT").
+
+Modifications: The original pyfia is a Python toolkit for USDA Forest
+Inventory & Analysis (FIA) data. Anamata Kāhui forked it to extract the
+biomass → carbon estimation math (under Apache-2.0), strip US-specific
+data loaders (FIA EVALIDator, USFS APIs), and add:
+
+  1. A te reo Māori internationalisation layer for CLI messages
+  2. An iwi/hapū attestation overlay on top of every estimate
+  3. JSON-Schema definitions for the attestation document
+  4. New Zealand–context biomass expansion factors (Douglas-fir,
+     radiata pine, native podocarps where data permits)
+
+Original pyfia copyright notice (preserved):
+
+  MIT License
+
+  Copyright (c) 2024-2026 Mihiar & Mohler
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
+The forked code lives in:
+
+  src/kaitiaki_carbon/core.py
+
+Modifications are noted at the top of each file with a `MODIFIED FOR KAITIAKI-CARBON`
+marker referencing this NOTICE file. Original function names and types are
+preserved where possible.
+
+---
+
+## satellite_image (Apache-2.0)
+
+This product adopts patterns from **satellite_image** by David Ketchum
+(https://github.com/dgketchum/satellite_image), Apache-2.0 licensed. Only the
+NDVI ingestion pattern is reused; no code is copied verbatim. Attribution:
+
+  Apache License 2.0
+
+  Copyright (c) David Ketchum
+
+---
+
+## Brand artefact
+
+`attest.py`, `attribution.py`, `cli.py`, and `i18n/mi.json` are original
+contributions by Anamata Kāhui Limited under Apache-2.0.
+
+---
+
+## iwi engagement
+
+The attestation schema (`attest.py`) and the iwi-engagement principles in
+`docs/iwi-engagement.md` are governed by the cultural protocol described
+in the engagement document. Modifications to schema or to the
+iwi-engagement protocol require iwi consultation as documented in
+`docs/iwi-engagement.md`. See that file for the consultation rules.

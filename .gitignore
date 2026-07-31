@@ -1,0 +1,54 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# ---- IDEs ----
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# ---- OS ----
+Thumbs.db
+
+# ---- Local secrets ----
+.env
+.env.local
+.env.*.local
+
+# ---- Project artefacts ----
+*.log
+*.tmp
+*.bak
+
+# ---- Test artefacts ----
+tests/fixtures/*.bin
+tests/fixtures/*.sqlite
+
+# ---- Domain fixtures (these are committed) ----
+# tests/fixtures/parcel.geojson — committed
+# tests/fixtures/attestation/*.json — committed
+# tests/fixtures/ndvi_sample.tif — DO NOT commit (too large, generated)
+
+# ---- IP reminder ----
+# This project is part of Anamata Kāhui Limited.
+# Do not commit NZBN, company number, or private creds.

@@ -1,0 +1,10 @@
+{
+  "iwi": "Ngāi Tahu",
+  "hapū": "Kāti Māmoe",
+  "iwi_runanga": "Te Rūnanga o Ngāi Tahu",
+  "kaitiaki": "Te Rūnanga o Arowhenua",
+  "scope": "papakainga",
+  "consent": ["research"],
+  "notes": "Carbon estimate for the papakāinga block at Arowhenua. Numbers are research-grade; use only for citation, not market or compliance.",
+  "schema_version": "0.1.0"
+}

@@ -1,0 +1,29 @@
+{
+  "cli": {
+    "estimate": {
+      "description": "Whakatau wārā waro mō tētahi papakā whenua, ā, ki te hiahia, taupā i te mana iwi/hapū ki runga i taua wārā.",
+      "parcel_arg": "Ara ki tētahi kōnae GeoJSON (Polygon, MultiPolygon) e whakaatu ana i te papakā whenua.",
+      "attestation_opt": "Ara ki tētahi kōnae JSON mō te taupā.",
+      "locale_opt": "Reo mō ngā karere a te CLI (en, mi).",
+      "verbose_opt": "Tāngia te putanga mahi katoa (ehara i te taitara anake).",
+      "running": "E tatau ana i te koiora → waro rokiroki → wārā CO2-hāngai mō te papakā whenua.",
+      "no_attestation": "Kāore he taupā i whakapiri. Ko te tātau hautau anake te putanga.",
+      "attestation_attached": "Kua whakapiri te taupā. Ka mau tonu te mana iwi i te putanga.",
+      "schema_warn": "Kāore i tika te taupā ki te schema v0.1.0:\n  {errors}\nKa haere tonu me te taupā māhorahora; ka whakatika ki te schema i te putanga v0.2.",
+      "result_headline": "Wārā waro: {estimate_tCO2e:.1f} tCO2e (95% CI [{ci_low:.1f}, {ci_high:.1f}])",
+      "result_attested": "I taupātia e {iwi} ({hapū_or_iwi}), kaitiaki: {kaitiaki}.",
+      "result_blob": "Kua tuhia te putanga ki {output_path}.",
+      "input_missing": "Kīhai i taea te pānui papakā mai i {path}: {reason}",
+      "input_not_polygon": "Ehara te GeoJSON i Polygon, MultiPolygon rānei (i whiwhi {type})."
+    },
+    "errors": {
+      "attestation_read": "Kīhai i taea te pānui kōnae taupā {path}: {reason}.",
+      "locale_unknown": "Kāore i te mōhiotia te reo '{locale}' — kua hoki ki te reo Pākehā."
+    },
+    "schema": {
+      "missing_required": "Me mātua whakaatu te āpure '{field}' i runga i te taupā.",
+      "bad_iwi_name": "Me āhua kore-tūturu te āpure 'iwi' (string kore-tuatahi).",
+      "bad_scope": "Me mātua noa te āpure 'scope' mō tētahi o ēnei: parcel, papakainga, collective, research."
+    }
+  }
+}

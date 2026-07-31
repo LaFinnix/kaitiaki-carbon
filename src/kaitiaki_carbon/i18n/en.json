@@ -1,0 +1,29 @@
+{
+  "cli": {
+    "estimate": {
+      "description": "Estimate carbon on a parcel and optionally attach an iwi/hapū attestation.",
+      "parcel_arg": "Path to a GeoJSON Polygon or MultiPolygon describing the parcel.",
+      "attestation_opt": "Path to an attestation JSON document.",
+      "locale_opt": "Display locale for CLI messages (en or mi).",
+      "verbose_opt": "Print full working output (not just the headline estimate).",
+      "running": "Computing biomass → stored carbon → CO2-equivalent for parcel.",
+      "no_attestation": "No attestation attached. Output is a numeric estimate only.",
+      "attestation_attached": "Attestation attached. Output preserves iwi provenance.",
+      "schema_warn": "Attestation did not validate against schema v0.1.0:\n  {errors}\nProceeding with raw attestation; will round-trip through schema in v0.2.",
+      "result_headline": "Carbon estimate: {estimate_tCO2e:.1f} tCO2e (95% CI [{ci_low:.1f}, {ci_high:.1f}])",
+      "result_attested": "Attested by {iwi} ({hapū_or_iwi}), kaitiaki: {kaitiaki}.",
+      "result_blob": "Full result written to {output_path}.",
+      "input_missing": "Could not read parcel from {path}: {reason}",
+      "input_not_polygon": "GeoJSON is not a Polygon or MultiPolygon (got {type})."
+    },
+    "errors": {
+      "attestation_read": "Could not read attestation file {path}: {reason}.",
+      "locale_unknown": "Unknown locale '{locale}' — falling back to English."
+    },
+    "schema": {
+      "missing_required": "Field '{field}' is required on attestation.",
+      "bad_iwi_name": "Field 'iwi' must be a non-empty string.",
+      "bad_scope": "Field 'scope' must be one of: parcel, papakainga, collective, research."
+    }
+  }
+}

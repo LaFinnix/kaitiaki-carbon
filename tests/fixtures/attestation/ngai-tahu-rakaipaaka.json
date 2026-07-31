@@ -1,0 +1,11 @@
+{
+  "iwi": "Ngāi Tahu",
+  "hapū": "Kāti Huirapa",
+  "iwi_runanga": "Te Rūnanga o Ōtākou",
+  "kaitiaki": "Kaumātua P. Smith",
+  "scope": "parcel",
+  "consent": ["research", "market"],
+  "notes": "Carbon estimate authorised for the puraka/Big Boulder block. Consult hapū before any policy citation.",
+  "contact_for_consent": "rūnanga.otakou@example.invalid",
+  "schema_version": "0.1.0"
+}
