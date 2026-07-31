@@ -19,7 +19,6 @@ Design notes (audit 2026-07-30):
 """
 
 import json
-import re
 import sys
 from pathlib import Path
 from typing import Literal

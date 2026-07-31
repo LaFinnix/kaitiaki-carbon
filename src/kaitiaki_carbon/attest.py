@@ -32,17 +32,16 @@ Released: 2026-07
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from enum import Enum
+from datetime import UTC, datetime
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-
 SCHEMA_VERSION = "0.1.0"
 
 
-class AttestationScope(str, Enum):
+class AttestationScope(StrEnum):
     """How broadly the attestation applies.
 
     * `parcel` — the specific parcel named (most common).
@@ -59,7 +58,7 @@ class AttestationScope(str, Enum):
     RESEARCH = "research"
 
 
-class ConsentChannel(str, Enum):
+class ConsentChannel(StrEnum):
     """What the attestation authorises the number to be used for.
 
     Each is independent. An attestation can list multiple — a single
@@ -120,7 +119,7 @@ class Attestation(BaseModel):
 
     # --- Provenance ---
     issued_at: datetime = Field(
-        default_factory=lambda: datetime.now(timezone.utc),
+        default_factory=lambda: datetime.now(UTC),
         description="When the attestation was issued.",
     )
     expires_at: datetime | None = Field(

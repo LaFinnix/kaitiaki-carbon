@@ -31,10 +31,14 @@ from typing import Any
 
 import polars as pl
 
-from kaitiaki_carbon.nsvb.carbon_fractions import DEFAULT_LIVE_CARBON_FRACTION, get_carbon_fraction_live
+from kaitiaki_carbon.nsvb.carbon_fractions import (
+    DEFAULT_LIVE_CARBON_FRACTION,
+    get_carbon_fraction_live,
+)
 from kaitiaki_carbon.nsvb.coefficients import VectorizedLookupTables, get_vectorized_lookup_tables
 from kaitiaki_carbon.nsvb.equations import compute_nsvb_biomass
-
+from kaitiaki_carbon.species_nz import SpeciesEntry
+from kaitiaki_carbon.species_nz import lookup as nz_species_lookup
 
 # Hardwood / softwood threshold per the FIA SPCD scheme.
 _HARDWOOD_SPCD_THRESHOLD = 300
@@ -99,6 +103,32 @@ def _get_lookup() -> VectorizedLookupTables:
     return _LOOKUP
 
 
+def _resolve_wdsg_for_tree(tree: dict[str, Any]) -> float:
+    """Pick the best available wood-density for a per-tree record.
+
+    Resolution order:
+      1. ``tree["wdsg"]`` (explicit user override — win).
+      2. ``tree["species_name"]`` — look up the NZ species table. If
+         that gives a matching entry with a non-None WDSG, use it.
+      3. SPCD-based Jenkins fallback — we still need a default of
+         0.42 g/cm³. v0.2 will do a proper WDSG-by-SPCD lookup.
+
+    Returns the wood density in g/cm³ (green-volume dry weight).
+    """
+    explicit = tree.get("wdsg")
+    if isinstance(explicit, (int, float)) and explicit > 0:
+        return float(explicit)
+
+    species_name = tree.get("species_name") or tree.get("species")
+    if species_name and isinstance(species_name, str):
+        entry: SpeciesEntry | None = nz_species_lookup(species_name)
+        if entry is not None and entry.wdsg > 0:
+            return entry.wdsg
+
+    # Default Jenkins-friendly mid-range.
+    return 0.42
+
+
 def _build_trees_frame(parcel_trees: list[dict[str, Any]]) -> pl.DataFrame:
     """Build the Polars DataFrame NSVB expects.
 
@@ -113,7 +143,6 @@ def _build_trees_frame(parcel_trees: list[dict[str, Any]]) -> pl.DataFrame:
     is added.
     """
     rows: list[dict[str, Any]] = []
-    spcds: list[int] = []
     for t in parcel_trees:
         spcd = int(t["spcd"])
         dia = float(t["dia"])
@@ -121,6 +150,10 @@ def _build_trees_frame(parcel_trees: list[dict[str, Any]]) -> pl.DataFrame:
         if ht <= 0.0:
             ht = 1.0  # NSVB requires HT > 0; default to 1m
         cull = float(t.get("cull", 0.0))
+        wdsg = _resolve_wdsg_for_tree(t)
+        # JENKINS_SPGRPCD: 1 covers softwood Jenkins groups.
+        # v0.2 will use a per-SPCD (or per-species) mapping for exact Jenkins group.
+        jenkins_spgrpcd = int(t.get("jenkins_spgrpcd", 1))
         # NSVB expects UPPERCASE column names.
         rows.append({
             "SPCD": spcd,
@@ -128,14 +161,9 @@ def _build_trees_frame(parcel_trees: list[dict[str, Any]]) -> pl.DataFrame:
             "HT": ht,
             "STATUSCD": int(t.get("statuscd", 1)),
             "CULL": cull,
-            "WDSG": 0.42,  # v0.1 default — v0.2 species-specific lookup
-            # JENKINS_SPGRPCD is required for the Jenkins Model 5
-            # fallback join to succeed even when a species-level
-            # entry exists. Setting it to 1 covers ~all softwood
-            # Jenkins groups; v0.2 will use a per-SPCD mapping.
-            "JENKINS_SPGRPCD": 1,
+            "WDSG": wdsg,
+            "JENKINS_SPGRPCD": jenkins_spgrpcd,
         })
-        spcds.append(spcd)
     return pl.DataFrame(rows)
 
 

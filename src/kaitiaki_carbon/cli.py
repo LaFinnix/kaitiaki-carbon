@@ -14,6 +14,7 @@ import click
 from kaitiaki_carbon.attest import Attestation, validate_attestation
 from kaitiaki_carbon.attribution import attach_attestation
 from kaitiaki_carbon.core import estimate_carbon
+from kaitiaki_carbon.geojson import parse_parcel
 from kaitiaki_carbon.i18n import t
 
 __version__ = "0.1.0"
@@ -41,32 +42,42 @@ def estimate(
     click.echo(t("cli.estimate.running", locale))
 
     try:
-        parcel_data = json.loads(parcel_path.read_text(encoding="utf-8"))
+        raw = json.loads(parcel_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        click.echo(t("cli.estimate.input_missing", locale, path=str(parcel_path), reason=str(exc)))
+        click.echo(
+            t("cli.estimate.input_missing", locale, path=str(parcel_path), reason=str(exc))
+        )
         sys.exit(1)
 
-    if parcel_data.get("type") not in ("Polygon", "MultiPolygon"):
+    # Phase 2: parse_parcel accepts GeoJSON Polygon, MultiPolygon, Feature,
+    # or pre-normalised parcel dicts.
+    try:
+        parcel = parse_parcel(raw)
+    except ValueError as exc:
         click.echo(
             t(
                 "cli.estimate.input_not_polygon",
                 locale,
-                type=parcel_data.get("type"),
+                type=str(exc),
             )
         )
         sys.exit(1)
 
-    parcel_id = parcel_data.get("id") or parcel_path.stem
-    area_ha = float(parcel_data.get("area_ha") or 0.0)
+    parcel_id = parcel.get("id") or parcel_path.stem
+    if not parcel.get("id"):
+        parcel["id"] = parcel_id
 
     try:
-        carbon_estimate = estimate_carbon(parcel_data, area_ha=area_ha)
+        carbon_estimate = estimate_carbon(parcel)
     except NotImplementedError:
         click.echo(
             "[estimate_carbon stub] Phase 1 pyfia fork not yet implemented.",
             err=True,
         )
         sys.exit(2)
+    except ValueError as exc:
+        click.echo(f"Validation failed: {exc}", err=True)
+        sys.exit(1)
     except Exception as exc:  # pragma: no cover — defensive
         click.echo(f"Estimate failed: {exc}", err=True)
         sys.exit(1)

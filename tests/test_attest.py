@@ -13,7 +13,7 @@ Modifications to this file imply modifications to the schema. See
 docs/iwi-engagement.md for the consultation rules.
 """
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 import pytest
@@ -130,20 +130,20 @@ class TestAttestationConsent:
 
 class TestAttestationTimestamps:
     def test_default_issued_at_is_utc_now(self) -> None:
-        before = datetime.now(timezone.utc)
+        before = datetime.now(UTC)
         att = Attestation.model_validate(_minimal())
-        after = datetime.now(timezone.utc)
+        after = datetime.now(UTC)
         assert before <= att.issued_at <= after
 
     def test_expires_after_issued(self) -> None:
-        future = (datetime.now(timezone.utc) + timedelta(days=365)).isoformat()
+        future = (datetime.now(UTC) + timedelta(days=365)).isoformat()
         payload = {**_minimal(), "expires_at": future}
         att = Attestation.model_validate(payload)
         assert att.expires_at is not None
 
     def test_expires_before_issued_fails(self) -> None:
-        past = (datetime.now(timezone.utc) - timedelta(days=365)).isoformat()
-        payload = {**_minimal(), "issued_at": datetime.now(timezone.utc).isoformat(), "expires_at": past}
+        past = (datetime.now(UTC) - timedelta(days=365)).isoformat()
+        payload = {**_minimal(), "issued_at": datetime.now(UTC).isoformat(), "expires_at": past}
         with pytest.raises(ValidationError):
             Attestation.model_validate(payload)
 

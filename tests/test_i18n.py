@@ -1,15 +1,10 @@
 """i18n loader tests — macrons-on-te-reo protection."""
 
-import io
 import json
-import subprocess
-import sys
 from pathlib import Path
 from typing import Any
 
-import pytest
-
-from kaitiaki_carbon.i18n import Locale, t
+from kaitiaki_carbon.i18n import t
 
 
 class TestResolveKnownKey:

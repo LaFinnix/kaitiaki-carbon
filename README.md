@@ -131,15 +131,22 @@ source .venv/bin/activate
 pip install -e .
 
 # 1. Estimate (no attestation — raw number)
-kaitiaki-carbon estimate tests/fixtures/parcel.geojson
+kaitiaki-carbon estimate tests/fixtures/parcel_auckland_radiata.geojson
 
 # 2. Estimate with attestation + te reo Māori CLI messages
-kaitiaki-carbon estimate tests/fixtures/parcel.geojson \
+kaitiaki-carbon estimate tests/fixtures/parcel_auckland_radiata.geojson \
     --attestation tests/fixtures/attestation/ngai-tahu-rakaipaaka.json \
     --locale mi
 ```
 
-See [`docs/QUICKSTART.md`](docs/QUICKSTART.md) for the longer walkthrough (NDVI ingestion, NZ ETS export format, attestation schema details).
+The CLI accepts both **GeoJSON Features** (Polygons + MultiPolygons)
+and **parcel dicts** (with `area_ha` and `trees` pre-populated) — see
+`tests/fixtures/parcel_auckland_radiata.geojson` for an end-to-end
+example.
+
+See [`docs/QUICKSTART.md`](docs/QUICKSTART.md) for the longer
+walkthrough (NDVI ingestion, NZ ETS export format, attestation
+schema details).
 
 ---
 

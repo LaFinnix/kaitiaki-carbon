@@ -19,7 +19,6 @@ import pytest
 
 from kaitiaki_carbon.core import CarbonEstimate, estimate_carbon
 
-
 # ----------------------------------------------------------------------
 # Fixtures
 # ----------------------------------------------------------------------

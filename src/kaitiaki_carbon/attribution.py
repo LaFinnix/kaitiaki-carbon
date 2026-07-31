@@ -9,12 +9,11 @@ estimate *plus* the people who said it is fair.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from kaitiaki_carbon.attest import Attestation
-    from kaitiaki_carbon.core import CarbonEstimate
+    pass
 
 
 @dataclass
@@ -37,7 +36,7 @@ class AttributedEstimate:
 
     # Provenance of the overlay itself
     overlaid_at: datetime = field(
-        default_factory=lambda: datetime.now(timezone.utc)
+        default_factory=lambda: datetime.now(UTC)
     )
 
     # Optional: an opaque correlation id for downstream systems

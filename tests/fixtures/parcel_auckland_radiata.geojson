@@ -1,0 +1,28 @@
+{
+  "type": "Feature",
+  "id": "auckland-radiata-test-parcel",
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [[
+      [174.7600, -36.8500],
+      [174.7800, -36.8500],
+      [174.7800, -36.8300],
+      [174.7600, -36.8300],
+      [174.7600, -36.8500]
+    ]]
+  },
+  "properties": {
+    "trees": [
+      {"spcd": 131, "dia": 30.0, "ht": 25.0, "statuscd": 1, "species_name": "radiata-pine"},
+      {"spcd": 131, "dia": 22.0, "ht": 19.0, "statuscd": 1, "species_name": "radiata-pine"},
+      {"spcd": 131, "dia": 35.0, "ht": 28.0, "statuscd": 1, "species_name": "radiata-pine"},
+      {"spcd": 131, "dia": 18.0, "ht": 14.0, "statuscd": 1, "species_name": "radiata-pine"},
+      {"spcd": 131, "dia": 24.0, "ht": 20.0, "statuscd": 1, "species_name": "radiata-pine"},
+      {"spcd": 131, "dia": 28.0, "ht": 23.0, "statuscd": 1, "species_name": "radiata-pine"},
+      {"spcd": 131, "dia": 31.0, "ht": 26.0, "statuscd": 1, "species_name": "radiata-pine"},
+      {"spcd": 131, "dia": 27.0, "ht": 22.0, "statuscd": 1, "species_name": "radiata-pine"},
+      {"spcd": 131, "dia": 25.0, "ht": 21.0, "statuscd": 1, "species_name": "radiata-pine"},
+      {"spcd": 131, "dia": 29.0, "ht": 24.0, "statuscd": 1, "species_name": "radiata-pine"}
+    ]
+  }
+}

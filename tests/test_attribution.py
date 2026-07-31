@@ -1,11 +1,8 @@
 """Attestation overlay tests."""
 
-from datetime import datetime, timezone
-from pathlib import Path
+from datetime import UTC, datetime
 
-import pytest
-
-from kaitiaki_carbon.attest import Attestation, validate_attestation
+from kaitiaki_carbon.attest import Attestation
 from kaitiaki_carbon.attribution import AttributedEstimate, attach_attestation
 
 
@@ -41,9 +38,9 @@ class TestAttachAttestation:
         assert attributed.attestation is att
 
     def test_default_overlaid_at_is_now(self) -> None:
-        before = datetime.now(timezone.utc)
+        before = datetime.now(UTC)
         attributed = attach_attestation(_carbon_estimate(), _attestation())
-        after = datetime.now(timezone.utc)
+        after = datetime.now(UTC)
         assert before <= attributed.overlaid_at <= after
 
     def test_correlation_id_optional(self) -> None:
