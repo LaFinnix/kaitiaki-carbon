@@ -22,24 +22,42 @@ kaitiaki-carbon estimate path/to/parcel.geojson \
     --locale mi
 ```
 
-Output (te reo Māori, macrons correct):
+Output:
 
 ```json
 {
   "parcel_id": "tapuwae-1A-north-block",
-  "estimate_tCO2e": 1248.32,
-  "ci_95_pct": [1180.0, 1316.6],
-  "method": "pyfia-biomass-v0.1",
+  "area_ha": 1.0,
+  "estimate_per_ha_tCO2e": 8.014,
+  "estimate_total_tCO2e": 8.014,
+  "ci_95_pct": {
+    "per_ha": [3.365, 12.663],
+    "total": [3.365, 12.663]
+  },
+  "method": "kaitiaki-carbon-v0.1-nsvb",
+  "tree_count": 3,
+  "species_count": 2,
   "attestation": {
     "iwi": "Ngāi Tahu",
     "hapū": "Kāti Huirapa",
     "kaitiaki": "Te Rūnanga o Ōtākou",
     "issued_at": "2026-07-31T00:00:00Z",
     "scope": "parcel",
-    "consent": "research"
-  },
-  "locale": "mi"
+    "consent": ["research", "market"]
+  }
 }
+```
+
+Numbers above correspond to 3 trees (Douglas-fir + Red maple) on a
+1-hectare parcel — verified against the vendored NSVB equations.
+
+N.B. the cli output is te reo Māori when `--locale mi`, e.g.:
+
+```
+$ kaitiaki-carbon estimate parcel.geojson --attestation foo.json --locale mi
+E tatau ana i te koiora → waro rokiroki → wārā CO2-hāngai mō te papakā whenua.
+Wārā waro: 8.0 tCO2e (95% CI [3.4, 12.7])
+I taupātia e Ngāi Tahu (Kāti Huirapa), kaitiaki: Te Rūnanga o Ōtākou.
 ```
 
 ---
@@ -74,7 +92,12 @@ Carbon estimation tools exist (USFS FIA, NZ ETS calculators, satellite-only plat
 
 ```
 src/kaitiaki_carbon/
-├── core.py          # biomass → carbon estimation math (forked from pyfia, MIT)
+├── core.py          # AGB → tCO₂e wrapper around NSVB (vendored under nsvb/)
+├── nsvb/            # NSVB math (Westfall GTR-WO-104) — vendored from pyfia, MIT
+│   ├── equations.py        # Models 1, 2, 4, 5 — pure math, no FIADB
+│   ├── coefficients.py     # NSVB lookup precedence + loader
+│   ├── carbon_fractions.py # S10a/S10b species-specific tables
+│   └── data/               # 15 vendored CSVs
 ├── attest.py        # iwi / hapū attestation schema (NEW — ours)
 ├── attribution.py   # overlay attestation onto an estimate (NEW — ours)
 ├── cli.py           # `kaitiaki-carbon estimate ...` (NEW — ours)
@@ -83,11 +106,16 @@ src/kaitiaki_carbon/
 
 | Layer | Source | License |
 |---|---|---|
-| Carbon math (`core.py`) | Forked from [`mihiarc/pyfia`](https://github.com/mihiarc/pyfia) | MIT → Apache-2.0 |
+| NSVB equations, coefficients, carbon fractions | Vendored from [`mihiarc/pyfia`](https://github.com/mihiarc/pyfia) | MIT |
+| NSVB coefficient CSV data | Vendored from `mihiarc/pyfia` | MIT (data is a public-domain FIA publication) |
+| `core.py` wrapper | Original (adapted from FIA's `live_tree` shape, dropped FIADB-specific bits) | Apache-2.0 |
 | Schema (`attest.py`) | Original | Apache-2.0 |
 | Overlay (`attribution.py`) | Original | Apache-2.0 |
 | CLI (`cli.py`) | Original | Apache-2.0 |
 | i18n (`mi.json`, `en.json`) | Original | Apache-2.0 |
+
+See `docs/UPSTREAM.md` for the full vendored-vs-original cut, and
+`NOTICE` for the upstream attribution.
 
 See [`NOTICE`](NOTICE) for upstream attribution. See [`docs/UPSTREAM.md`](docs/UPSTREAM.md) for the full upstream-patch status.
 

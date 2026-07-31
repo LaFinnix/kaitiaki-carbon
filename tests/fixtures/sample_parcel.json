@@ -1,0 +1,9 @@
+{
+  "id": "tapuwae-1A-north-block",
+  "area_ha": 1.0,
+  "trees": [
+    {"spcd": 202, "dia": 30.0, "ht": 25.0, "statuscd": 1},
+    {"spcd": 316, "dia": 22.0, "ht": 18.0, "statuscd": 1},
+    {"spcd": 202, "dia": 18.0, "ht": 14.0, "statuscd": 1}
+  ]
+}

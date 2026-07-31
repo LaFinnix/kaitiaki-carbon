@@ -72,6 +72,15 @@ kaitiaki-carbon = "kaitiaki_carbon.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/kaitiaki_carbon"]
+include = [
+    "src/kaitiaki_carbon/nsvb/data/*.csv",
+    "src/kaitiaki_carbon/nsvb/data/*.md",
+    "src/kaitiaki_carbon/i18n/*.json",
+]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/kaitiaki_carbon/nsvb/data" = "kaitiaki_carbon/nsvb/data"
+"src/kaitiaki_carbon/i18n" = "kaitiaki_carbon/i18n"
 
 [tool.ruff]
 target-version = "py311"
