@@ -278,8 +278,13 @@ def estimate_carbon(parcel: dict[str, Any], **kwargs: Any) -> CarbonEstimate:
             unknown_species=tuple(sorted(unknown_species)),
         )
 
-    total_biomass_kg = float(valid_df["agb"].sum())
-    tree_biomass_values = valid_df["agb"].to_list()
+    # NSVB's `agb` column is in POUNDS (per GTR-WO-104). Convert to kg.
+    # The previous v0.1.0-alpha treated lb as kg, inflating the tCO2e
+    # figure by ~2.5×. Fixed in this revision.
+    _KG_PER_POUND = 0.45359237
+    total_biomass_lb = float(valid_df["agb"].sum())
+    total_biomass_kg = total_biomass_lb * _KG_PER_POUND
+    tree_biomass_values_kg = [v * _KG_PER_POUND for v in valid_df["agb"].to_list()]
     total_carbon_kg = total_biomass_kg * carbon_fraction
 
     # tCO2e = tC × (44 / 12)
@@ -288,15 +293,15 @@ def estimate_carbon(parcel: dict[str, Any], **kwargs: Any) -> CarbonEstimate:
     tCO2e_per_ha = tCO2e_total / area_ha
 
     # Coarse 95% CI from per-tree biomass variance.
-    if len(tree_biomass_values) > 1:
-        mean_b = statistics.mean(tree_biomass_values)
-        sd_b = statistics.stdev(tree_biomass_values)
-        se_b = sd_b / math.sqrt(len(tree_biomass_values))
+    if len(tree_biomass_values_kg) > 1:
+        mean_b = statistics.mean(tree_biomass_values_kg)
+        sd_b = statistics.stdev(tree_biomass_values_kg)
+        se_b = sd_b / math.sqrt(len(tree_biomass_values_kg))
         ci_b_low = max(0.0, mean_b - 1.96 * se_b)
         ci_b_high = mean_b + 1.96 * se_b
         ci_total = (
-            ci_b_low * len(tree_biomass_values) * carbon_fraction * kg_to_t * (44 / 12),
-            ci_b_high * len(tree_biomass_values) * carbon_fraction * kg_to_t * (44 / 12),
+            ci_b_low * len(tree_biomass_values_kg) * carbon_fraction * kg_to_t * (44 / 12),
+            ci_b_high * len(tree_biomass_values_kg) * carbon_fraction * kg_to_t * (44 / 12),
         )
         ci_per_ha = (ci_total[0] / area_ha, ci_total[1] / area_ha)
     else:
@@ -311,7 +316,7 @@ def estimate_carbon(parcel: dict[str, Any], **kwargs: Any) -> CarbonEstimate:
         method="kaitiaki-carbon-v0.1-nsvb",
         ci_95_pct_per_ha=ci_per_ha,
         ci_95_pct_total=ci_total,
-        tree_count=len(tree_biomass_values),
+        tree_count=len(tree_biomass_values_kg),
         species_count=len(species_seen),
         unknown_species=tuple(sorted(unknown_species)),
     )

@@ -26,30 +26,43 @@ Output:
 
 ```json
 {
-  "parcel_id": "tapuwae-1A-north-block",
-  "area_ha": 1.0,
-  "estimate_per_ha_tCO2e": 8.014,
-  "estimate_total_tCO2e": 8.014,
+  "parcel_id": "auckland-radiata-test-parcel",
+  "area_ha": 395.81276330044835,
+  "estimate_per_ha_tCO2e": 0.02905340434814547,
+  "estimate_total_tCO2e": 11.49970825832472,
   "ci_95_pct": {
-    "per_ha": [3.365, 12.663],
-    "total": [3.365, 12.663]
+    "per_ha": [
+      0.02094611692531581,
+      0.03716069177097512
+    ],
+    "total": [
+      8.290740420623543,
+      14.708676096025894
+    ]
   },
   "method": "kaitiaki-carbon-v0.1-nsvb",
-  "tree_count": 3,
-  "species_count": 2,
+  "tree_count": 10,
+  "species_count": 1,
+  "unknown_species": [],
   "attestation": {
     "iwi": "Ngāi Tahu",
     "hapū": "Kāti Huirapa",
-    "kaitiaki": "Te Rūnanga o Ōtākou",
-    "issued_at": "2026-07-31T00:00:00Z",
+    "iwi_runanga": "Te Rūnanga o Ōtākou",
+    "kaitiaki": "Kaumātua P. Smith",
     "scope": "parcel",
-    "consent": ["research", "market"]
+    "consent": [
+      "research",
+      "market"
+    ]
   }
 }
 ```
 
-Numbers above correspond to 3 trees (Douglas-fir + Red maple) on a
-1-hectare parcel — verified against the vendored NSVB equations.
+Numbers above come from the actual `tests/fixtures/parcel_auckland_radiata.geojson` fixture (10 mature radiata pine on a ~396 ha parcel near Auckland) run through the vendored NSVB pipeline. Reproducible locally with:
+
+```bash
+python -c "from kaitiaki_carbon.geojson import parse_parcel; from kaitiaki_carbon import estimate_carbon; import json; print(json.dumps(estimate_carbon(parse_parcel(json.load(open('tests/fixtures/parcel_auckland_radiata.geojson'))).to_wire_format(), indent=2))"
+```
 
 N.B. the cli output is te reo Māori when `--locale mi`, e.g.:
 
