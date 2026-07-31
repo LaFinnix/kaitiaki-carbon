@@ -137,45 +137,57 @@ class TestCoreIntegration:
 
     def test_kauri_wdsg_used_when_species_name_supplied(self) -> None:
         from kaitiaki_carbon.core import _resolve_wdsg_for_tree
-        wdsg = _resolve_wdsg_for_tree({
-            "spcd": 999,  # unknown SPCD; should not matter
-            "dia": 30.0,
-            "ht": 25.0,
-            "species_name": "kauri",
-        })
+
+        wdsg = _resolve_wdsg_for_tree(
+            {
+                "spcd": 999,  # unknown SPCD; should not matter
+                "dia": 30.0,
+                "ht": 25.0,
+                "species_name": "kauri",
+            }
+        )
         # The kauri row's WDSG is 0.50.
         assert abs(wdsg - 0.50) < 1e-6
 
     def test_explicit_wdsg_overrides_species_name(self) -> None:
         from kaitiaki_carbon.core import _resolve_wdsg_for_tree
-        wdsg = _resolve_wdsg_for_tree({
-            "spcd": 202,
-            "dia": 30.0,
-            "ht": 25.0,
-            "species_name": "kauri",
-            "wdsg": 0.99,  # user override
-        })
+
+        wdsg = _resolve_wdsg_for_tree(
+            {
+                "spcd": 202,
+                "dia": 30.0,
+                "ht": 25.0,
+                "species_name": "kauri",
+                "wdsg": 0.99,  # user override
+            }
+        )
         assert wdsg == 0.99
 
     def test_unknown_species_falls_back_to_default(self) -> None:
         from kaitiaki_carbon.core import _resolve_wdsg_for_tree
-        wdsg = _resolve_wdsg_for_tree({
-            "spcd": 999,
-            "dia": 30.0,
-            "ht": 25.0,
-            "species_name": "made-up-tree",
-        })
+
+        wdsg = _resolve_wdsg_for_tree(
+            {
+                "spcd": 999,
+                "dia": 30.0,
+                "ht": 25.0,
+                "species_name": "made-up-tree",
+            }
+        )
         # Falls back to the 0.42 default (mid-range hardwood/softwood).
         assert abs(wdsg - 0.42) < 1e-6
 
     def test_no_species_name_falls_back_to_default(self) -> None:
         from kaitiaki_carbon.core import _resolve_wdsg_for_tree
-        wdsg = _resolve_wdsg_for_tree({
-            "spcd": 202,
-            "dia": 30.0,
-            "ht": 25.0,
-            # no species_name
-        })
+
+        wdsg = _resolve_wdsg_for_tree(
+            {
+                "spcd": 202,
+                "dia": 30.0,
+                "ht": 25.0,
+                # no species_name
+            }
+        )
         assert abs(wdsg - 0.42) < 1e-6
 
 
@@ -186,6 +198,7 @@ class TestMacronPreservation:
         # No current species entry uses macros in the canonical name,
         # but alias lookups should pass macrons through unchanged.
         from kaitiaki_carbon.species_nz import lookup
+
         # "rimu te repo" or "pōhue" aren't real aliases, but they should
         # at least not crash and should return None.
         e = lookup("rimu")

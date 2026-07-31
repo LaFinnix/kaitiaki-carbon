@@ -190,9 +190,7 @@ def build_species_level_lookup(table_spcd: pl.DataFrame) -> pl.DataFrame:
         has a species-level entry in the source table.
     """
     return table_spcd.filter(
-        pl.col("DIVISION").is_null()
-        & pl.col("STDORGCD").is_null()
-        & _valid_coef_filter()
+        pl.col("DIVISION").is_null() & pl.col("STDORGCD").is_null() & _valid_coef_filter()
     ).select(["SPCD", *_VECTORIZED_COEF_COLS])
 
 
@@ -262,9 +260,7 @@ def build_division_lookup(table_spcd: pl.DataFrame) -> pl.DataFrame:
         unique ``(SPCD, DIVISION)`` pair with a Level-2 entry.
     """
     return table_spcd.filter(
-        pl.col("DIVISION").is_not_null()
-        & pl.col("STDORGCD").is_null()
-        & _valid_coef_filter()
+        pl.col("DIVISION").is_not_null() & pl.col("STDORGCD").is_null() & _valid_coef_filter()
     ).select(["SPCD", "DIVISION", *_VECTORIZED_COEF_COLS])
 
 
@@ -294,9 +290,7 @@ def build_division_stdorg_lookup(table_spcd: pl.DataFrame) -> pl.DataFrame:
         Columns ``(SPCD, DIVISION, STDORGCD, model, a, a1, b, b1, c, c1)``.
     """
     return table_spcd.filter(
-        pl.col("DIVISION").is_not_null()
-        & pl.col("STDORGCD").is_not_null()
-        & _valid_coef_filter()
+        pl.col("DIVISION").is_not_null() & pl.col("STDORGCD").is_not_null() & _valid_coef_filter()
     ).select(["SPCD", "DIVISION", "STDORGCD", *_VECTORIZED_COEF_COLS])
 
 
@@ -325,9 +319,7 @@ def build_stdorg_lookup(table_spcd: pl.DataFrame) -> pl.DataFrame:
         Columns ``(SPCD, STDORGCD, model, a, a1, b, b1, c, c1)``.
     """
     return table_spcd.filter(
-        pl.col("DIVISION").is_null()
-        & pl.col("STDORGCD").is_not_null()
-        & _valid_coef_filter()
+        pl.col("DIVISION").is_null() & pl.col("STDORGCD").is_not_null() & _valid_coef_filter()
     ).select(["SPCD", "STDORGCD", *_VECTORIZED_COEF_COLS])
 
 
@@ -613,17 +605,13 @@ def lookup_coefficients(
 
     # Level 1: SPCD + DIVISION + STDORGCD exact match
     if division is not None and stdorgcd is not None:
-        match = df.filter(
-            (pl.col("DIVISION") == division) & (pl.col("STDORGCD") == stdorgcd)
-        )
+        match = df.filter((pl.col("DIVISION") == division) & (pl.col("STDORGCD") == stdorgcd))
         if match.height > 0:
             return _row_to_dict(match.head(1), "spcd_division_stdorg")
 
     # Level 2: SPCD + DIVISION (STDORGCD null)
     if division is not None:
-        match = df.filter(
-            (pl.col("DIVISION") == division) & pl.col("STDORGCD").is_null()
-        )
+        match = df.filter((pl.col("DIVISION") == division) & pl.col("STDORGCD").is_null())
         if match.height > 0:
             return _row_to_dict(match.head(1), "spcd_division")
 

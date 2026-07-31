@@ -108,10 +108,7 @@ def load_carbon_fractions_live() -> dict[int, float]:
     data_pkg = resources.files("kaitiaki_carbon.nsvb.data")
     with resources.as_file(data_pkg / "carbon_fraction_live.csv") as path:
         df = pl.read_csv(path)
-    return {
-        int(row["SPCD"]): float(row["fia_wood_c"]) / 100.0
-        for row in df.iter_rows(named=True)
-    }
+    return {int(row["SPCD"]): float(row["fia_wood_c"]) / 100.0 for row in df.iter_rows(named=True)}
 
 
 @functools.lru_cache(maxsize=1)

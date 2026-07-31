@@ -35,9 +35,7 @@ class AttributedEstimate:
     attestation: Any  # Attestation
 
     # Provenance of the overlay itself
-    overlaid_at: datetime = field(
-        default_factory=lambda: datetime.now(UTC)
-    )
+    overlaid_at: datetime = field(default_factory=lambda: datetime.now(UTC))
 
     # Optional: an opaque correlation id for downstream systems
     correlation_id: str | None = None

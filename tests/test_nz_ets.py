@@ -73,13 +73,15 @@ class TestEmitEtsRecord:
             estimate_total_tCO2e=10.0,
             method="test",
         )
-        att = Attestation.model_validate({
-            "iwi": "Ngāi Tahu",
-            "hapū": "Kāti Huirapa",
-            "kaitiaki": "Te Rūnanga o Ōtākou",
-            "scope": "parcel",
-            "consent": ["research", "market"],
-        })
+        att = Attestation.model_validate(
+            {
+                "iwi": "Ngāi Tahu",
+                "hapū": "Kāti Huirapa",
+                "kaitiaki": "Te Rūnanga o Ōtākou",
+                "scope": "parcel",
+                "consent": ["research", "market"],
+            }
+        )
         record = emit_ets_record(
             attach_attestation(carbon_est, att),
             facility="F",
@@ -97,20 +99,26 @@ class TestEmitEtsRecord:
 
     def test_species_composition_default(self) -> None:
         carbon_est = CarbonEstimate(
-            parcel_id="x", area_ha=1.0,
-            estimate_per_ha_tCO2e=1.0, estimate_total_tCO2e=1.0,
+            parcel_id="x",
+            area_ha=1.0,
+            estimate_per_ha_tCO2e=1.0,
+            estimate_total_tCO2e=1.0,
             method="test",
         )
         att = Attestation.model_validate({"iwi": "Y", "kaitiaki": "K"})
-        record = emit_ets_record(attach_attestation(carbon_est, att), facility="F", reporting_period="2026")
+        record = emit_ets_record(
+            attach_attestation(carbon_est, att), facility="F", reporting_period="2026"
+        )
         # The default is one placeholder row at 100% basal area.
         assert len(record["species_composition"]) == 1
         assert record["species_composition"][0]["fraction_of_basal_area"] == 1.0
 
     def test_species_composition_override(self) -> None:
         carbon_est = CarbonEstimate(
-            parcel_id="x", area_ha=1.0,
-            estimate_per_ha_tCO2e=1.0, estimate_total_tCO2e=1.0,
+            parcel_id="x",
+            area_ha=1.0,
+            estimate_per_ha_tCO2e=1.0,
+            estimate_total_tCO2e=1.0,
             method="test",
         )
         att = Attestation.model_validate({"iwi": "Y", "kaitiaki": "K"})
@@ -133,16 +141,20 @@ class TestEmitEtsRecord:
 
     def test_submitted_at_default_is_recent(self) -> None:
         import datetime
+
         before = datetime.datetime.now(datetime.UTC)
         carbon_est = CarbonEstimate(
-            parcel_id="x", area_ha=1.0,
-            estimate_per_ha_tCO2e=1.0, estimate_total_tCO2e=1.0,
+            parcel_id="x",
+            area_ha=1.0,
+            estimate_per_ha_tCO2e=1.0,
+            estimate_total_tCO2e=1.0,
             method="test",
         )
         att = Attestation.model_validate({"iwi": "Y", "kaitiaki": "K"})
         record = emit_ets_record(
             attach_attestation(carbon_est, att),
-            facility="F", reporting_period="2026",
+            facility="F",
+            reporting_period="2026",
         )
         after = datetime.datetime.now(datetime.UTC)
         submitted_at = datetime.datetime.fromisoformat(record["submitted_at"])
@@ -152,15 +164,18 @@ class TestEmitEtsRecord:
 
     def test_explicit_submitted_at_override(self) -> None:
         carbon_est = CarbonEstimate(
-            parcel_id="x", area_ha=1.0,
-            estimate_per_ha_tCO2e=1.0, estimate_total_tCO2e=1.0,
+            parcel_id="x",
+            area_ha=1.0,
+            estimate_per_ha_tCO2e=1.0,
+            estimate_total_tCO2e=1.0,
             method="test",
         )
         att = Attestation.model_validate({"iwi": "Y", "kaitiaki": "K"})
         fixed_ts = "2026-12-31T23:59:59+00:00"
         record = emit_ets_record(
             attach_attestation(carbon_est, att),
-            facility="F", reporting_period="2026",
+            facility="F",
+            reporting_period="2026",
             submitted_at=fixed_ts,
         )
         assert record["submitted_at"] == fixed_ts
@@ -186,13 +201,17 @@ class TestEmitEtsRecord:
     def test_macron_round_trip(self) -> None:
         # ETS submission must preserve macrons in te reo strings.
         carbon_est = CarbonEstimate(
-            parcel_id="tapuwae", area_ha=1.0,
-            estimate_per_ha_tCO2e=10.0, estimate_total_tCO2e=10.0, method="test",
+            parcel_id="tapuwae",
+            area_ha=1.0,
+            estimate_per_ha_tCO2e=10.0,
+            estimate_total_tCO2e=10.0,
+            method="test",
         )
         att = Attestation.model_validate({"iwi": "Ngāi Tahu", "kaitiaki": "Kaitiaki"})
         record = emit_ets_record(
             attach_attestation(carbon_est, att),
-            facility="F", reporting_period="2026",
+            facility="F",
+            reporting_period="2026",
         )
         assert "Ngāi Tahu" in record["iwi_attestation"]["iwi"]
 
@@ -207,18 +226,24 @@ class TestEtsEndToEnd:
             "id": "tapuwae-1A-north-block",
             "area_ha": 1.0,
             "trees": [
-                {"spcd": 131, "dia": 30.0, "ht": 25.0, "statuscd": 1,
-                 "species_name": "radiata-pine"},
-                {"spcd": 12, "dia": 22.0, "ht": 18.0, "statuscd": 1,
-                 "species_name": "rimu"},
+                {
+                    "spcd": 131,
+                    "dia": 30.0,
+                    "ht": 25.0,
+                    "statuscd": 1,
+                    "species_name": "radiata-pine",
+                },
+                {"spcd": 12, "dia": 22.0, "ht": 18.0, "statuscd": 1, "species_name": "rimu"},
             ],
         }
         est = estimate_carbon(parcel)
-        att = Attestation.model_validate({
-            "iwi": "Ngāi Tahu",
-            "hapū": "Kāti Huirapa",
-            "kaitiaki": "Te Rūnanga o Ōtākou",
-        })
+        att = Attestation.model_validate(
+            {
+                "iwi": "Ngāi Tahu",
+                "hapū": "Kāti Huirapa",
+                "kaitiaki": "Te Rūnanga o Ōtākou",
+            }
+        )
         attributed = attach_attestation(est, att)
         record = emit_ets_record(
             attributed,

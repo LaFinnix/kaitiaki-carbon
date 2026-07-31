@@ -106,9 +106,7 @@ def model_1(d: float, h: float, a: float, b: float, c: float) -> float:
     return float(a * (d**b) * (h**c))
 
 
-def model_2(
-    d: float, h: float, a: float, b: float, b1: float, c: float, k: float
-) -> float:
+def model_2(d: float, h: float, a: float, b: float, b1: float, c: float, k: float) -> float:
     """NSVB Model 2 (Segmented): a two-branch power form split at ``k``.
 
     Per GTR-WO-104 eq. 2::
@@ -144,9 +142,7 @@ def model_2(
     return float(a * (k ** (b - b1)) * (d**b1) * (h**c))
 
 
-def model_3(
-    d: float, h: float, a: float, a1: float, b: float, c1: float, c: float
-) -> float:
+def model_3(d: float, h: float, a: float, a1: float, b: float, c1: float, c: float) -> float:
     """NSVB Model 3 (Continuously Variable): ``y = a * D^(a1*(1-exp(-b*D))^c1) * H^c``.
 
     Per GTR-WO-104 eq. 3 (the "Continuously Variable model"): the diameter
@@ -198,9 +194,7 @@ def model_4(d: float, h: float, a: float, b: float, b1: float, c: float) -> floa
     return float(a * (d**b) * (h**c) * math.exp(-b1 * d))
 
 
-def model_5_jenkins(
-    d: float, h: float, a: float, b: float, c: float, wdsg: float
-) -> float:
+def model_5_jenkins(d: float, h: float, a: float, b: float, c: float, wdsg: float) -> float:
     """NSVB Model 5 (Jenkins-group fallback): ``y = a * D^b * H^c * WDSG``.
 
     Used when a species lacks SPCD-specific coefficients in S1a-S8a and falls
@@ -323,9 +317,7 @@ def _eval_component(coef: dict, d: float, h: float, spcd: int, wdsg: float) -> f
     if model == 1:
         return model_1(d, h, coef["a"], coef["b"], coef["c"])
     if model == 2:
-        return model_2(
-            d, h, coef["a"], coef["b"], coef["b1"], coef["c"], _model_k(spcd)
-        )
+        return model_2(d, h, coef["a"], coef["b"], coef["b1"], coef["c"], _model_k(spcd))
     if model == 3:
         return model_3(d, h, coef["a"], coef["a1"], coef["b"], coef["c1"], coef["c"])
     if model == 4:
@@ -565,11 +557,7 @@ def nsvb_biomass_expr(
         biomass) in source-table units (cubic feet or pounds). Call
         ``.alias("v_wood_ib")`` (or similar) to name the output column.
     """
-    k = (
-        pl.when(spcd >= _HARDWOOD_SPCD_THRESHOLD)
-        .then(_K_HARDWOOD)
-        .otherwise(_K_SOFTWOOD)
-    )
+    k = pl.when(spcd >= _HARDWOOD_SPCD_THRESHOLD).then(_K_HARDWOOD).otherwise(_K_SOFTWOOD)
     # Model 2 is segmented at k: Schumacher-Hall below, b1-exponent above.
     model_2_expr = (
         pl.when(d < k)
@@ -869,9 +857,7 @@ def compute_nsvb_biomass(
     )
     trees = trees.with_columns(
         [
-            (pl.col("v_wood_ib") * pl.col("WDSG").cast(pl.Float64) * 62.4).alias(
-                "_w_wood_gross"
-            ),
+            (pl.col("v_wood_ib") * pl.col("WDSG").cast(pl.Float64) * 62.4).alias("_w_wood_gross"),
             (
                 pl.col("v_wood_ib")
                 * (1.0 - pl.col("_cull") / 100.0 * (1.0 - pl.col("_dens_prop")))
@@ -886,14 +872,12 @@ def compute_nsvb_biomass(
     # cull-reduced for live trees per worked example lines 870-880).
     trees = trees.with_columns(
         [
-            (
-                pl.col("_w_wood_gross")
-                + pl.col("_w_bark_pre")
-                + pl.col("_w_branch_pre")
-            ).alias("_comp_gross_sum"),
-            (
-                pl.col("_w_wood_red") + pl.col("_w_bark_pre") + pl.col("_w_branch_pre")
-            ).alias("_comp_red_sum"),
+            (pl.col("_w_wood_gross") + pl.col("_w_bark_pre") + pl.col("_w_branch_pre")).alias(
+                "_comp_gross_sum"
+            ),
+            (pl.col("_w_wood_red") + pl.col("_w_bark_pre") + pl.col("_w_branch_pre")).alias(
+                "_comp_red_sum"
+            ),
         ]
     )
     trees = trees.with_columns(
@@ -917,27 +901,15 @@ def compute_nsvb_biomass(
     trees = trees.with_columns(
         [
             pl.when(pl.col("_comp_red_sum") > 0)
-            .then(
-                pl.col("_agb_pred_red")
-                * pl.col("_w_wood_red")
-                / pl.col("_comp_red_sum")
-            )
+            .then(pl.col("_agb_pred_red") * pl.col("_w_wood_red") / pl.col("_comp_red_sum"))
             .otherwise(pl.col("_agb_pred_red"))
             .alias("w_wood"),
             pl.when(pl.col("_comp_red_sum") > 0)
-            .then(
-                pl.col("_agb_pred_red")
-                * pl.col("_w_bark_pre")
-                / pl.col("_comp_red_sum")
-            )
+            .then(pl.col("_agb_pred_red") * pl.col("_w_bark_pre") / pl.col("_comp_red_sum"))
             .otherwise(pl.lit(0.0))
             .alias("w_bark"),
             pl.when(pl.col("_comp_red_sum") > 0)
-            .then(
-                pl.col("_agb_pred_red")
-                * pl.col("_w_branch_pre")
-                / pl.col("_comp_red_sum")
-            )
+            .then(pl.col("_agb_pred_red") * pl.col("_w_branch_pre") / pl.col("_comp_red_sum"))
             .otherwise(pl.lit(0.0))
             .alias("w_branch"),
         ]
@@ -1103,9 +1075,7 @@ def compute_nsvb_dead_biomass(
     # Step 3 — Convert wood volume to gross weight.
     trees = trees.with_columns(
         [
-            (pl.col("v_wood_ib") * pl.col("WDSG").cast(pl.Float64) * 62.4).alias(
-                "_w_wood_gross"
-            ),
+            (pl.col("v_wood_ib") * pl.col("WDSG").cast(pl.Float64) * 62.4).alias("_w_wood_gross"),
         ]
     )
 
@@ -1131,9 +1101,7 @@ def compute_nsvb_dead_biomass(
                 pl.when(pl.col("ECOSUBCD").is_null() | (pl.col("ECOSUBCD") == ""))
                 .then(pl.lit("UNDEFINED"))
                 .when(pl.col("ECOSUBCD").str.to_uppercase().str.starts_with("M"))
-                .then(
-                    pl.lit("M") + pl.col("ECOSUBCD").str.to_uppercase().str.slice(1, 3)
-                )
+                .then(pl.lit("M") + pl.col("ECOSUBCD").str.to_uppercase().str.slice(1, 3))
                 .otherwise(pl.col("ECOSUBCD").str.to_uppercase().str.slice(0, 3))
             )
         else:
@@ -1152,11 +1120,9 @@ def compute_nsvb_dead_biomass(
         # both the broken-top and decay reductions against the intact
         # AGB prediction from S8a/S8b.
         trees = trees.with_columns(
-            (
-                pl.col("_w_wood_gross")
-                + pl.col("_w_bark_pre")
-                + pl.col("_w_branch_pre")
-            ).alias("_comp_gross_sum_intact")
+            (pl.col("_w_wood_gross") + pl.col("_w_bark_pre") + pl.col("_w_branch_pre")).alias(
+                "_comp_gross_sum_intact"
+            )
         )
 
         trees = trees.with_columns(
@@ -1199,9 +1165,7 @@ def compute_nsvb_dead_biomass(
 
         # Guard against zero/negative CRprop_HT (degenerate cases where
         # ACTUALHT ≈ 0 or CR_MEAN ≈ 100).
-        broken_crn = ((actualht - (1.0 - crprop_ht) * ht) / (crprop_ht * ht)).clip(
-            lower_bound=0.0
-        )
+        broken_crn = ((actualht - (1.0 - crprop_ht) * ht) / (crprop_ht * ht)).clip(lower_bound=0.0)
 
         # Volume ratio: paraboloid taper approximation of stem volume below
         # break.  Real stems have a shape between a paraboloid (exponent 2/3)
@@ -1230,9 +1194,7 @@ def compute_nsvb_dead_biomass(
             ]
         )
 
-        trees = trees.drop(
-            ["_ecoprov", "_bt_hw_sw", "_cr_mean", "_crn_prop", "_vol_ratio"]
-        )
+        trees = trees.drop(["_ecoprov", "_bt_hw_sw", "_cr_mean", "_crn_prop", "_vol_ratio"])
 
     # Step 7 — Join the FIADB REF_TREE_DECAY_PROP table on (hw_sw, DECAYCD).
     # The hw_sw column is derived from the SPCD<300 rule to stay consistent
@@ -1263,9 +1225,7 @@ def compute_nsvb_dead_biomass(
         [
             (pl.col("_w_wood_gross") * pl.col("_density_prop")).alias("_w_wood_dead"),
             (pl.col("_w_bark_pre") * pl.col("_bark_loss_prop")).alias("_w_bark_dead"),
-            (pl.col("_w_branch_pre") * pl.col("_branch_loss_prop")).alias(
-                "_w_branch_dead"
-            ),
+            (pl.col("_w_branch_pre") * pl.col("_branch_loss_prop")).alias("_w_branch_dead"),
         ]
     )
 
@@ -1276,22 +1236,18 @@ def compute_nsvb_dead_biomass(
     # reduction and the decay reduction against the intact AGB prediction.
     trees = trees.with_columns(
         [
-            (
-                pl.col("_w_wood_dead")
-                + pl.col("_w_bark_dead")
-                + pl.col("_w_branch_dead")
-            ).alias("_comp_dead_sum"),
+            (pl.col("_w_wood_dead") + pl.col("_w_bark_dead") + pl.col("_w_branch_dead")).alias(
+                "_comp_dead_sum"
+            ),
         ]
     )
     if _has_broken_top_correction:
         gross_denom = pl.col("_comp_gross_sum_intact")
     else:
         trees = trees.with_columns(
-            (
-                pl.col("_w_wood_gross")
-                + pl.col("_w_bark_pre")
-                + pl.col("_w_branch_pre")
-            ).alias("_comp_gross_sum"),
+            (pl.col("_w_wood_gross") + pl.col("_w_bark_pre") + pl.col("_w_branch_pre")).alias(
+                "_comp_gross_sum"
+            ),
         )
         gross_denom = pl.col("_comp_gross_sum")
     trees = trees.with_columns(
@@ -1310,27 +1266,15 @@ def compute_nsvb_dead_biomass(
     trees = trees.with_columns(
         [
             pl.when(pl.col("_comp_dead_sum") > 0)
-            .then(
-                pl.col("_agb_pred_dead")
-                * pl.col("_w_wood_dead")
-                / pl.col("_comp_dead_sum")
-            )
+            .then(pl.col("_agb_pred_dead") * pl.col("_w_wood_dead") / pl.col("_comp_dead_sum"))
             .otherwise(pl.col("_agb_pred_dead"))
             .alias("w_wood"),
             pl.when(pl.col("_comp_dead_sum") > 0)
-            .then(
-                pl.col("_agb_pred_dead")
-                * pl.col("_w_bark_dead")
-                / pl.col("_comp_dead_sum")
-            )
+            .then(pl.col("_agb_pred_dead") * pl.col("_w_bark_dead") / pl.col("_comp_dead_sum"))
             .otherwise(pl.lit(0.0))
             .alias("w_bark"),
             pl.when(pl.col("_comp_dead_sum") > 0)
-            .then(
-                pl.col("_agb_pred_dead")
-                * pl.col("_w_branch_dead")
-                / pl.col("_comp_dead_sum")
-            )
+            .then(pl.col("_agb_pred_dead") * pl.col("_w_branch_dead") / pl.col("_comp_dead_sum"))
             .otherwise(pl.lit(0.0))
             .alias("w_branch"),
         ]

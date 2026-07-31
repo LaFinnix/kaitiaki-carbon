@@ -110,18 +110,23 @@ When WO-104 is revised, re-vendor as follows:
 
    ```python
    import csv
-   mapping = {'angiosperm': 'hardwood', 'gymnosperm': 'softwood'}
-   with open('Table S10a_fia_wood_c_frac_live.csv.csv') as fin, \
-        open('carbon_fraction_live.csv', 'w', newline='') as fout:
+
+   mapping = {"angiosperm": "hardwood", "gymnosperm": "softwood"}
+   with (
+       open("Table S10a_fia_wood_c_frac_live.csv.csv") as fin,
+       open("carbon_fraction_live.csv", "w", newline="") as fout,
+   ):
        reader = csv.DictReader(fin)
-       writer = csv.DictWriter(fout, fieldnames=['SPCD', 'hw_sw', 'fia_wood_c'])
+       writer = csv.DictWriter(fout, fieldnames=["SPCD", "hw_sw", "fia_wood_c"])
        writer.writeheader()
        for row in reader:
-           writer.writerow({
-               'SPCD': row['SPCD'],
-               'hw_sw': mapping.get(row['division'].strip(), row['division'].strip()),
-               'fia_wood_c': row['fia.wood.c'],
-           })
+           writer.writerow(
+               {
+                   "SPCD": row["SPCD"],
+                   "hw_sw": mapping.get(row["division"].strip(), row["division"].strip()),
+                   "fia_wood_c": row["fia.wood.c"],
+               }
+           )
    ```
 
 4. Run `uv run pytest tests/unit/test_nsvb_*.py tests/unit/test_carbon_fractions.py`

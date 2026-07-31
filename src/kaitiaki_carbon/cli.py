@@ -29,9 +29,27 @@ def main() -> None:
 
 @main.command()
 @click.argument("parcel_path", type=click.Path(exists=True, dir_okay=False, path_type=Path))
-@click.option("--attestation", "attestation_path", type=click.Path(exists=True, dir_okay=False, path_type=Path), default=None, help="Path to an attestation JSON document.")
-@click.option("--locale", "locale", type=click.Choice(["en", "mi"]), default="en", help="Display locale for CLI messages.")
-@click.option("--verbose", "verbose", is_flag=True, default=False, help="Print full working output (not just the headline estimate).")
+@click.option(
+    "--attestation",
+    "attestation_path",
+    type=click.Path(exists=True, dir_okay=False, path_type=Path),
+    default=None,
+    help="Path to an attestation JSON document.",
+)
+@click.option(
+    "--locale",
+    "locale",
+    type=click.Choice(["en", "mi"]),
+    default="en",
+    help="Display locale for CLI messages.",
+)
+@click.option(
+    "--verbose",
+    "verbose",
+    is_flag=True,
+    default=False,
+    help="Print full working output (not just the headline estimate).",
+)
 def estimate(
     parcel_path: Path,
     attestation_path: Path | None,
@@ -44,9 +62,7 @@ def estimate(
     try:
         raw = json.loads(parcel_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
-        click.echo(
-            t("cli.estimate.input_missing", locale, path=str(parcel_path), reason=str(exc))
-        )
+        click.echo(t("cli.estimate.input_missing", locale, path=str(parcel_path), reason=str(exc)))
         sys.exit(1)
 
     # Phase 2: parse_parcel accepts GeoJSON Polygon, MultiPolygon, Feature,
@@ -140,7 +156,13 @@ def estimate(
         click.echo(t("cli.estimate.no_attestation", locale))
 
     if verbose:
-        click.echo(json.dumps(attributed.to_wire_format() if attestation else carbon_estimate.to_wire_format(), indent=2, ensure_ascii=False))
+        click.echo(
+            json.dumps(
+                attributed.to_wire_format() if attestation else carbon_estimate.to_wire_format(),
+                indent=2,
+                ensure_ascii=False,
+            )
+        )
 
 
 if __name__ == "__main__":

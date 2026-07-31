@@ -154,9 +154,7 @@ class Attestation(BaseModel):
     @classmethod
     def _consent_not_empty(cls, v: list[ConsentChannel]) -> list[ConsentChannel]:
         if not v:
-            raise ValueError(
-                "consent list cannot be empty — even RESEARCH must be explicit."
-            )
+            raise ValueError("consent list cannot be empty — even RESEARCH must be explicit.")
         return v
 
     @model_validator(mode="after")

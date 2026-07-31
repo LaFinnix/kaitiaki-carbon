@@ -69,18 +69,18 @@ class TestAttestationHierarchy:
         assert att.hapū == "Kāti Huirapa"
 
     def test_iwi_runanga_optional(self) -> None:
-        att = Attestation.model_validate(
-            {**_minimal(), "iwi_runanga": "Te Rūnanga o Ngāi Tahu"}
-        )
+        att = Attestation.model_validate({**_minimal(), "iwi_runanga": "Te Rūnanga o Ngāi Tahu"})
         assert att.iwi_runanga is not None
 
     def test_full_hierarchy(self) -> None:
-        att = Attestation.model_validate({
-            "iwi": "Ngāi Tahu",
-            "hapū": "Kāti Huirapa",
-            "iwi_runanga": "Te Rūnanga o Ōtākou",
-            "kaitiaki": "Kaumātua P. Smith",
-        })
+        att = Attestation.model_validate(
+            {
+                "iwi": "Ngāi Tahu",
+                "hapū": "Kāti Huirapa",
+                "iwi_runanga": "Te Rūnanga o Ōtākou",
+                "kaitiaki": "Kaumātua P. Smith",
+            }
+        )
         assert att.iwi == "Ngāi Tahu"
         assert att.hapū == "Kāti Huirapa"
         assert att.iwi_runanga == "Te Rūnanga o Ōtākou"
@@ -93,9 +93,7 @@ class TestAttestationScope:
         assert att.scope == AttestationScope.PARCEL
 
     def test_research_scope(self) -> None:
-        att = Attestation.model_validate(
-            {**_minimal(), "scope": AttestationScope.RESEARCH.value}
-        )
+        att = Attestation.model_validate({**_minimal(), "scope": AttestationScope.RESEARCH.value})
         assert att.scope == AttestationScope.RESEARCH
 
     def test_invalid_scope_fails(self) -> None:
@@ -116,9 +114,7 @@ class TestAttestationConsent:
             Attestation.model_validate(payload)
 
     def test_multiple_consents(self) -> None:
-        att = Attestation.model_validate(
-            {**_minimal(), "consent": ["research", "market"]}
-        )
+        att = Attestation.model_validate({**_minimal(), "consent": ["research", "market"]})
         assert ConsentChannel.RESEARCH in att.consent
         assert ConsentChannel.MARKET in att.consent
 
@@ -197,17 +193,21 @@ class TestAttestationMacronPreservation:
         assert "ā" in att.iwi
 
     def test_macrons_in_hapu_preserved(self) -> None:
-        att = Attestation.model_validate({
-            "iwi": "Ngāi Tahu",
-            "kaitiaki": "Kaitiaki",
-            "hapū": "Kāti Huirapa",
-        })
+        att = Attestation.model_validate(
+            {
+                "iwi": "Ngāi Tahu",
+                "kaitiaki": "Kaitiaki",
+                "hapū": "Kāti Huirapa",
+            }
+        )
         assert "ā" in (att.hapū or "")
 
     def test_unicode_in_notes_preserved(self) -> None:
-        att = Attestation.model_validate({
-            "iwi": "Ngāi Tahu",
-            "kaitiaki": "Kaitiaki",
-            "notes": "Whakapapa me ngā tikanga.",
-        })
+        att = Attestation.model_validate(
+            {
+                "iwi": "Ngāi Tahu",
+                "kaitiaki": "Kaitiaki",
+                "notes": "Whakapapa me ngā tikanga.",
+            }
+        )
         assert "ā" in (att.notes or "")

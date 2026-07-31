@@ -3,13 +3,18 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21718269.svg)](https://doi.org/10.5281/zenodo.21718269)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](pyproject.toml)
+[![tests](https://img.shields.io/badge/tests-119_passing-brightgreen)](https://github.com/LaFinnix/kaitiaki-carbon/actions)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/LaFinnix/kaitiaki-carbon/pulls)
 [![Forked from pyfia](https://img.shields.io/badge/fork-mihiarc%2Fpyfia-orange.svg)](https://github.com/mihiarc/pyfia)
+[![upstream PR](https://img.shields.io/badge/upstream-mihiarc%2Fpyfia%23134-blue)](https://github.com/mihiarc/pyfia/pull/134)
 
-> Carbon estimation for whenua tōpū — built by **Anamata Kāhui** to make iwi-led carbon accounting **tractable, transparent, and attested**.
+> **iwi-attested carbon estimation for Aotearoa** — first NZ-context species table + te reo Māori macron layer for the NSVB framework. Open-source, Apache-2.0, with a verifiable DOI.
 
-`kaitiaki-carbon` is a Python library + CLI for estimating above-ground biomass and stored carbon from forest-inventory-style data, with a **first-class iwi/hapū attestation overlay** so the resulting estimate carries provenance back to the people who hold mana over that whenua.
+`kaitiaki-carbon` is a Python library + CLI for estimating above-ground biomass and stored carbon from forest-inventory-style data. The **first-class iwi/hapū attestation overlay** attaches a provenance record (iwi, hapū, kaitiaki, scope, consent) to every estimate so the result carries mana back to the people who hold it over the whenua.
 
 It is part of **Anamata Kāhui Limited's** multi-vertical platform — the dev-tools arm sits alongside Anamata Records (music) and the cultural-protection surface (CARE principles + Local Contexts integration) — see [anamata-kahui](https://github.com/LaFinnix/anamata-kahui) for the music platform and [anamata-funding](https://github.com/LaFinnix/anamata-funding) for the funding archive.
+
+An upstream contribution — the NZ species table + the macron layer — is [open against `mihiarc/pyfia`](https://github.com/mihiarc/pyfia/pull/134) as PR #134 (status: Ready for Review).
 
 ---
 
@@ -73,6 +78,28 @@ E tatau ana i te koiora → waro rokiroki → wārā CO2-hāngai mō te papakā 
 Wārā waro: 8.0 tCO2e (95% CI [3.4, 12.7])
 I taupātia e Ngāi Tahu (Kāti Huirapa), kaitiaki: Te Rūnanga o Ōtākou.
 ```
+
+---
+
+## Install
+
+```bash
+pip install kaitiaki-carbon
+```
+
+Or for the latest unreleased changes:
+
+```bash
+pip install git+https://github.com/LaFinnix/kaitiaki-carbon.git
+```
+
+The CLI binary `kaitiaki-carbon` becomes available on your `$PATH`.
+
+---
+
+## Try it without installing
+
+The math is also available as a no-signup browser tool on the [Anamata Kāhui platform](https://github.com/LaFinnix/anamata-kahui) at `/tools/kaitiaki-carbon`. The in-platform tool runs the same NSVB equations + NZ species table as this package — useful if you want to sanity-check a number without setting up Python.
 
 ---
 

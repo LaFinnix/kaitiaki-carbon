@@ -155,15 +155,17 @@ def _build_trees_frame(parcel_trees: list[dict[str, Any]]) -> pl.DataFrame:
         # v0.2 will use a per-SPCD (or per-species) mapping for exact Jenkins group.
         jenkins_spgrpcd = int(t.get("jenkins_spgrpcd", 1))
         # NSVB expects UPPERCASE column names.
-        rows.append({
-            "SPCD": spcd,
-            "DIA": dia,
-            "HT": ht,
-            "STATUSCD": int(t.get("statuscd", 1)),
-            "CULL": cull,
-            "WDSG": wdsg,
-            "JENKINS_SPGRPCD": jenkins_spgrpcd,
-        })
+        rows.append(
+            {
+                "SPCD": spcd,
+                "DIA": dia,
+                "HT": ht,
+                "STATUSCD": int(t.get("statuscd", 1)),
+                "CULL": cull,
+                "WDSG": wdsg,
+                "JENKINS_SPGRPCD": jenkins_spgrpcd,
+            }
+        )
     return pl.DataFrame(rows)
 
 
@@ -186,15 +188,11 @@ def estimate_carbon(parcel: dict[str, Any], **kwargs: Any) -> CarbonEstimate:
     coarse 95% CI from the per-tree biomass variance.
     """
     parcel_id = (
-        parcel.get("id")
-        or parcel.get("parcel_id")
-        or kwargs.get("parcel_id", "parcel-unknown")
+        parcel.get("id") or parcel.get("parcel_id") or kwargs.get("parcel_id", "parcel-unknown")
     )
     area_ha = float(parcel.get("area_ha", 0.0))
     if area_ha <= 0.0:
-        raise ValueError(
-            "parcel.area_ha must be > 0; v0.2 will compute from GeoJSON."
-        )
+        raise ValueError("parcel.area_ha must be > 0; v0.2 will compute from GeoJSON.")
 
     trees: list[dict[str, Any]] = parcel.get("trees", [])
     species_seen: set[int] = {int(t["spcd"]) for t in trees} if trees else set()
@@ -238,9 +236,7 @@ def estimate_carbon(parcel: dict[str, Any], **kwargs: Any) -> CarbonEstimate:
     # Identify trees that NSVB couldn't resolve (NaN or zero agb = unknown SPCD).
     unknown_species: set[int] = set()
     if "agb" in biomass_df.columns:
-        missing_mask = (
-            biomass_df["agb"].is_null() | (biomass_df["agb"] == 0)
-        )
+        missing_mask = biomass_df["agb"].is_null() | (biomass_df["agb"] == 0)
         if missing_mask.any() and "SPCD" in biomass_df.columns:
             unknown_species = {
                 int(s) for s in biomass_df.filter(missing_mask)["SPCD"].unique().to_list()

@@ -134,10 +134,10 @@ def emit_ets_record(
             "consent": [c.value for c in attestation.consent],
             "issued_at": attestation.issued_at.isoformat(),
             "schema_version": attestation.schema_version,
-        } if attestation is not None else None,
-        "submitted_at": submitted_at or datetime.datetime.now(
-            datetime.UTC
-        ).isoformat(),
+        }
+        if attestation is not None
+        else None,
+        "submitted_at": submitted_at or datetime.datetime.now(datetime.UTC).isoformat(),
     }
 
 

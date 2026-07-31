@@ -37,13 +37,25 @@ class TestMacronProtection:
 
 class TestFormatting:
     def test_named_args_substituted(self) -> None:
-        s = t("cli.estimate.result_headline", "en", estimate_tCO2e=1200.5, ci_low=1100.0, ci_high=1300.0)
+        s = t(
+            "cli.estimate.result_headline",
+            "en",
+            estimate_tCO2e=1200.5,
+            ci_low=1100.0,
+            ci_high=1300.0,
+        )
         assert "1200.5" in s
         assert "1100.0" in s
         assert "1300.0" in s
 
     def test_te_reo_named_args_substituted(self) -> None:
-        s = t("cli.estimate.result_headline", "mi", estimate_tCO2e=1200.5, ci_low=1100.0, ci_high=1300.0)
+        s = t(
+            "cli.estimate.result_headline",
+            "mi",
+            estimate_tCO2e=1200.5,
+            ci_low=1100.0,
+            ci_high=1300.0,
+        )
         assert "1200.5" in s
         assert "1100.0" in s
         assert "1300.0" in s

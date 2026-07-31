@@ -61,9 +61,7 @@ class TestEstimateCarbonBasic:
     def test_per_ha_equals_total_for_unit_area(self) -> None:
         # For a 1-ha parcel, per_ha and total should match.
         est = estimate_carbon(_parcel(area_ha=1.0))
-        assert math.isclose(
-            est.estimate_per_ha_tCO2e, est.estimate_total_tCO2e, rel_tol=1e-9
-        )
+        assert math.isclose(est.estimate_per_ha_tCO2e, est.estimate_total_tCO2e, rel_tol=1e-9)
 
     def test_estimate_scales_with_area(self) -> None:
         # Total carbon is fixed (same trees, same biomass). Per-ha
@@ -76,9 +74,7 @@ class TestEstimateCarbonBasic:
         e1 = estimate_carbon(_parcel(area_ha=1.0, trees=trees))
         e10 = estimate_carbon(_parcel(area_ha=10.0, trees=trees))
         # Total is identical (same 3 trees, same biomass).
-        assert math.isclose(
-            e1.estimate_total_tCO2e, e10.estimate_total_tCO2e, rel_tol=1e-9
-        )
+        assert math.isclose(e1.estimate_total_tCO2e, e10.estimate_total_tCO2e, rel_tol=1e-9)
         # Per-ha is total / area, so 10ha → 1/10 of 1ha per_ha.
         assert math.isclose(
             e10.estimate_per_ha_tCO2e,
@@ -209,6 +205,7 @@ class TestWireFormat:
 
     def test_wire_format_json_roundtrip(self) -> None:
         import json
+
         est = estimate_carbon(_parcel())
         d = est.to_wire_format()
         s = json.dumps(d, ensure_ascii=False)
@@ -241,6 +238,7 @@ class TestIwiField:
 
     def test_estimator_does_not_touch_attestation(self) -> None:
         from kaitiaki_carbon.attest import Attestation
+
         # Attach an attestation — estimator should not use it.
         att = Attestation.model_validate({"iwi": "Ngāi Tahu", "kaitiaki": "Kaitiaki"})
         parcel = _parcel()
@@ -266,11 +264,13 @@ class TestMacronPreservation:
         # iwi data attached alongside should remain untouched.
         from kaitiaki_carbon.attest import Attestation
 
-        att = Attestation.model_validate({
-            "iwi": "Ngāi Tahu",
-            "hapū": "Kāti Huirapa",
-            "kaitiaki": "Kaitiaki",
-        })
+        att = Attestation.model_validate(
+            {
+                "iwi": "Ngāi Tahu",
+                "hapū": "Kāti Huirapa",
+                "kaitiaki": "Kaitiaki",
+            }
+        )
         parcel = _parcel()
         est = estimate_carbon(parcel)
         # Test that the estimator coexists with macron strings.

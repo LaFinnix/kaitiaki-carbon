@@ -8,6 +8,7 @@ from kaitiaki_carbon.attribution import AttributedEstimate, attach_attestation
 
 def _carbon_estimate():
     from kaitiaki_carbon.core import CarbonEstimate
+
     return CarbonEstimate(
         parcel_id="test-parcel",
         area_ha=10.0,
@@ -20,11 +21,13 @@ def _carbon_estimate():
 
 
 def _attestation():
-    return Attestation.model_validate({
-        "iwi": "Ngāi Tahu",
-        "hapū": "Kāti Huirapa",
-        "kaitiaki": "Te Rūnanga o Ōtākou",
-    })
+    return Attestation.model_validate(
+        {
+            "iwi": "Ngāi Tahu",
+            "hapū": "Kāti Huirapa",
+            "kaitiaki": "Te Rūnanga o Ōtākou",
+        }
+    )
 
 
 class TestAttachAttestation:
