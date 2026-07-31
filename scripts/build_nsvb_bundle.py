@@ -47,15 +47,65 @@ def load_csv(name: str) -> list[dict]:
     return rows
 
 
+def _split_by_tier(rows: list[dict]) -> dict:
+    """Split a *_spcd rows list into the 4 NSVB precedence tiers.
+
+    Tiers:
+      * 0 (DIV+STDORG): DIVISION non-null AND STDORGCD non-null
+      * 1a (DIV only):  DIVISION non-null AND STDORGCD null
+      * 1b (STDORG only): DIVISION null AND STDORGCD non-null
+      * 3 (SPCD only):  DIVISION null AND STDORGCD null
+
+    Each tier keeps the same row shape; the TypeScript port implements
+    the precedence chain: try tier 0, then 1a, then 1b, then 3.
+    """
+    out = {"divorg": [], "div": [], "org": [], "spcd": []}
+    for r in rows:
+        div = r.get("DIVISION")
+        stdorg = r.get("STDORGCD")
+        if div is not None and stdorg is not None:
+            out["divorg"].append(r)
+        elif div is not None:
+            out["div"].append(r)
+        elif stdorg is not None:
+            out["org"].append(r)
+        else:
+            out["spcd"].append(r)
+    return out
+
+
 def build_bundle() -> dict:
     """Build the complete NSVB coefficient bundle."""
+    # Split each *_spcd table into 4 precedence tiers.
+    volib = _split_by_tier(load_csv("volib_spcd.csv"))
+    volbk = _split_by_tier(load_csv("volbk_spcd.csv"))
+    bark = _split_by_tier(load_csv("bark_biomass_spcd.csv"))
+    branch = _split_by_tier(load_csv("branch_biomass_spcd.csv"))
+    total = _split_by_tier(load_csv("total_biomass_spcd.csv"))
+
     return {
-        # SPCD-specific tables
-        "volib_spcd": load_csv("volib_spcd.csv"),
-        "volbk_spcd": load_csv("volbk_spcd.csv"),
-        "bark_biomass_spcd": load_csv("bark_biomass_spcd.csv"),
-        "branch_biomass_spcd": load_csv("branch_biomass_spcd.csv"),
-        "total_biomass_spcd": load_csv("total_biomass_spcd.csv"),
+        # SPCD-specific tables split by NSVB precedence tier.
+        # The TypeScript port walks tier 0 → 1a → 1b → 3.
+        "volib_divorg": volib["divorg"],
+        "volib_div": volib["div"],
+        "volib_org": volib["org"],
+        "volib_spcd": volib["spcd"],
+        "volbk_divorg": volbk["divorg"],
+        "volbk_div": volbk["div"],
+        "volbk_org": volbk["org"],
+        "volbk_spcd": volbk["spcd"],
+        "bark_bio_divorg": bark["divorg"],
+        "bark_bio_div": bark["div"],
+        "bark_bio_org": bark["org"],
+        "bark_bio_spcd": bark["spcd"],
+        "branch_bio_divorg": branch["divorg"],
+        "branch_bio_div": branch["div"],
+        "branch_bio_org": branch["org"],
+        "branch_bio_spcd": branch["spcd"],
+        "total_agb_divorg": total["divorg"],
+        "total_agb_div": total["div"],
+        "total_agb_org": total["org"],
+        "total_agb_spcd": total["spcd"],
         # Jenkins-group fallback tables
         "volib_jenkins": load_csv("volib_jenkins.csv"),
         "volbk_jenkins": load_csv("volbk_jenkins.csv"),
