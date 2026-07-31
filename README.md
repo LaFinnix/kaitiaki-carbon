@@ -1,5 +1,6 @@
 # kaitiaki-carbon
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21718269.svg)](https://doi.org/10.5281/zenodo.21718269)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](pyproject.toml)
 [![Forked from pyfia](https://img.shields.io/badge/fork-mihiarc%2Fpyfia-orange.svg)](https://github.com/mihiarc/pyfia)
