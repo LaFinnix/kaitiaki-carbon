@@ -266,3 +266,26 @@ We don't see "carbon" or "music" or "funding" as separate businesses — they're
 ---
 
 Kia kaha, kia māia, kia manawanui.
+
+
+---
+
+## Authors & Maintainers
+
+- **Ngaika Smith** — Founder, Anamata Kāhui Limited — [@LaFinnix](https://github.com/LaFinnix) · [ORCID 0009-0002-1952-7454](https://orcid.org/0009-0002-1952-7454) · ngaika@anamatakahui.co.nz
+- **Anamata Kāhui Limited** — [anamatakahui.co.nz](https://anamatakahui.co.nz)
+
+### How to cite
+
+```bibtex
+@software{smith_kaitiaki_carbon_2026,
+  author  = {Smith, Ngaika},
+  title   = {kaitiaki-carbon: iwi-attested carbon estimation for Aotearoa},
+  year    = {2026},
+  url     = {https://github.com/LaFinnix/kaitiaki-carbon},
+  doi     = {10.5281/zenodo.21718269},
+  orcid   = {0009-0002-1952-7454},
+}
+```
+
+See [`CITATION.cff`](CITATION.cff) for the machine-readable version.
