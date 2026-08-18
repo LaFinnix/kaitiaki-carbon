@@ -1,0 +1,35 @@
+cff-version: 1.2.0
+message: "If you use kaitiaki-carbon in research, please cite it as below."
+type: software
+title: "kaitiaki-carbon"
+version: 0.1.0
+date-released: 2026-07-31
+license: Apache-2.0
+url: "https://github.com/LaFinnix/kaitiaki-carbon"
+repository-code: "https://github.com/LaFinnix/kaitiaki-carbon"
+keywords:
+  - carbon-estimation
+  - forest-inventory
+  - indigenous-data-sovereignty
+  - new-zealand
+  - polars
+  - duckdb
+  - iwi-attestation
+authors:
+  - family-names: Smith
+    given-names: Ngaika
+    affiliation: Anamata Kāhui Limited
+    email: ngaika@anamatakahui.co.nz
+    orcid: "https://orcid.org/0009-0002-1952-7454"
+preferred-citation:
+  type: article
+  title: "kaitiaki-carbon: iwi-attested carbon estimation for Aotearoa"
+  authors:
+    - family-names: Smith
+      given-names: Ngaika
+      affiliation: Anamata Kāhui Limited
+      orcid: "https://orcid.org/0009-0002-1952-7454"
+  year: 2026
+  publisher: Zenodo
+  doi: 10.5281/zenodo.21718269
+  url: https://doi.org/10.5281/zenodo.21718269
