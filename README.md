@@ -12,7 +12,7 @@
 
 `kaitiaki-carbon` is a Python library + CLI for estimating above-ground biomass and stored carbon from forest-inventory-style data. The **first-class iwi/hapū attestation overlay** attaches a provenance record (iwi, hapū, kaitiaki, scope, consent) to every estimate so the result carries mana back to the people who hold it over the whenua.
 
-It is part of **Anamata Kāhui Limited's** multi-vertical platform — the dev-tools arm sits alongside Anamata Records (music) and the cultural-protection surface (CARE principles + Local Contexts integration) — see [anamata-kahui](https://github.com/LaFinnix/anamata-kahui) for the music platform and [anamata-funding](https://github.com/LaFinnix/anamata-funding) for the funding archive.
+It is part of **Anamata.dev's** multi-vertical platform — the dev-tools arm sits alongside Anamata Records (music) and the cultural-protection surface (CARE principles + Local Contexts integration) — see [anamata-kahui](https://github.com/LaFinnix/anamata-kahui) for the music platform and [anamata-funding](https://github.com/LaFinnix/anamata-funding) for the funding archive.
 
 An upstream contribution — the NZ species table + the macron layer — is [open against `mihiarc/pyfia`](https://github.com/mihiarc/pyfia/pull/134) as PR #134 (status: Ready for Review).
 
@@ -256,7 +256,7 @@ We are actively contributing back to the upstream forest-inventory ecosystem:
 
 ## Part of Anamata Kāhui
 
-Anamata Kāhui Limited is a Māori-owned multi-vertical platform operating under Ngāi Tahu registration. The dev-tools arm of the platform lives here. Other arms:
+Anamata.dev is a Māori-owned multi-vertical platform operating under Ngāi Tahu registration. The dev-tools arm of the platform lives here. Other arms:
 
 - **Anamata Records** — music label + artist collective ([anamata-kahui](https://github.com/LaFinnix/anamata-kahui))
 - **Funding archive** — past and current applications ([anamata-funding](https://github.com/LaFinnix/anamata-funding))
@@ -272,8 +272,8 @@ Kia kaha, kia māia, kia manawanui.
 
 ## Authors & Maintainers
 
-- **Ngaika Smith** — Founder, Anamata Kāhui Limited — [@LaFinnix](https://github.com/LaFinnix) · [ORCID 0009-0002-1952-7454](https://orcid.org/0009-0002-1952-7454) · ngaika@anamatakahui.co.nz
-- **Anamata Kāhui Limited** — [anamatakahui.co.nz](https://anamatakahui.co.nz)
+- **Ngaika Smith** — Founder, Anamata.dev — [@LaFinnix](https://github.com/LaFinnix) · [ORCID 0009-0002-1952-7454](https://orcid.org/0009-0002-1952-7454) · ngaika@anamatakahui.co.nz
+- **Anamata.dev** — [anamatakahui.co.nz](https://anamatakahui.co.nz)
 
 ### How to cite
 
