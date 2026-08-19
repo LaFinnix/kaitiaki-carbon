@@ -1,7 +1,7 @@
 # kaitiaki-carbon — Methodology
 
 **Author:** Ngaika Smith (ORCID [0009-0002-1952-7454](https://orcid.org/0009-0002-1952-7454))
-**Affiliation:** Anamata Kāhui Limited — [anamatakahui.co.nz](https://anamatakahui.co.nz)
+**Affiliation:** Anamata.dev — [anamatakahui.co.nz](https://anamatakahui.co.nz)
 **Version:** 1.0
 **Date:** 2026-08-18
 **DOI:** [10.5281/zenodo.21718269](https://doi.org/10.5281/zenodo.21718269)
@@ -15,7 +15,7 @@
 @techreport{smith_kaitiaki_carbon_methodology_2026,
   author      = {Smith, Ngaika},
   title       = {kaitiaki-carbon: Methodology for iwi-attested carbon estimation in Aotearoa},
-  institution = {Anamata Kāhui Limited},
+  institution = {Anamata.dev},
   year        = {2026},
   version     = {1.0},
   doi         = {10.5281/zenodo.21718269},
