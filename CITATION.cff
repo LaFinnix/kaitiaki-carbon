@@ -18,7 +18,7 @@ keywords:
 authors:
   - family-names: Smith
     given-names: Ngaika
-    affiliation: Anamata Kāhui Limited
+    affiliation: Anamata.dev
     email: ngaika@anamatakahui.co.nz
     orcid: "https://orcid.org/0009-0002-1952-7454"
 preferred-citation:
@@ -27,7 +27,7 @@ preferred-citation:
   authors:
     - family-names: Smith
       given-names: Ngaika
-      affiliation: Anamata Kāhui Limited
+      affiliation: Anamata.dev
       orcid: "https://orcid.org/0009-0002-1952-7454"
   year: 2026
   publisher: Zenodo
