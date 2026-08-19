@@ -10,7 +10,7 @@ readme = "README.md"
 license = { text = "Apache-2.0" }
 requires-python = ">=3.11"
 authors = [
-    { name = "Anamata Kāhui Limited", email = "dev@anamatakahui.co.nz" },
+    { name = "Anamata.dev", email = "dev@anamatakahui.co.nz" },
     { name = "Ngaika Smith", email = "ngaika@anamatakahui.co.nz" },
 ]
 maintainers = [
